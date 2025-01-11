@@ -21,6 +21,11 @@ Posts within a series do not need to be published consecutively; the series feat
 The diagram below illustrates how series posts (3, 5, and 8) exist within the main blog flow while maintaining their own ordered sequence within Series 1.
 
 {% mermaid(full_width=true) %}
+---
+config:
+    flowchart:
+        rankSpacing: "70"
+---
 flowchart
     subgraph main[BLOG]
         P1[Post 1]
