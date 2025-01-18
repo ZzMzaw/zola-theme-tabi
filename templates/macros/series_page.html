@@ -59,22 +59,33 @@ Parameters:
         {%- endfor -%}
 
         {# Determine template to use based on available navigation #}
-        {%- set position = "middle" -%}
+        {%- set positions = [] -%}
         {%- if prev_page is defined and not next_page is defined -%}
-            {%- set_global position = "prev_only" -%}
+            {%- set_global positions = positions | concat(with="prev_only") -%}
         {%- elif next_page is defined and not prev_page is defined -%}
-            {%- set_global position = "next_only" -%}
+            {%- set_global positions = positions | concat(with="next_only") -%}
         {%- endif -%}
+        {%- if prev_page is defined and next_page is defined -%}
+            {%- set_global positions = positions | concat(with="middle") -%}
+        {%- endif -%}
+        {%- if prev_page is defined -%}
+            {%- set_global positions = positions | concat(with="has_prev") -%}
+        {%- endif -%}
+        {%- if next_page is defined -%}
+            {%- set_global positions = positions | concat(with="has_next") -%}
+        {%- endif -%}
+        {%- set_global positions = positions | concat(with="default") -%}
 
         {# Get template from config #}
         {%- set templates_key = "series_" ~ template_type ~ "_templates" -%}
         {%- set template = "" -%}
         {%- if series_section.extra[templates_key] is defined -%}
-            {%- if series_section.extra[templates_key][position] is defined -%}
-                {%- set_global template = series_section.extra[templates_key][position] -%}
-            {%- elif series_section.extra[templates_key].default is defined -%}
-                {%- set_global template = series_section.extra[templates_key].default -%}
-            {%- endif -%}
+            {%- for position in positions -%}
+                {%- if series_section.extra[templates_key][position] is defined -%}
+                    {%- set_global template = series_section.extra[templates_key][position] -%}
+                    {%- break -%}
+                {%- endif -%}
+            {%- endfor -%}
         {%- endif -%}
 
         {# Prepare navigation variables #}
