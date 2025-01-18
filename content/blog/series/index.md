@@ -175,9 +175,13 @@ The series system uses different templates based on an article's position in the
 - `next_only` - Used for the first article (has next article but no previous)
 - `middle` - Used for articles with both previous and next articles
 - `prev_only` - Used for the last article (has previous article but no next)
+- `has_next` - Used for articles with next articles (including the first)
+- `has_prev` - Used for articles with previous articles (including the last)
 - `default` - Fallback template used when a specific position template isn't defined
 
-The system automatically determines which template to use based on the article's position. The templates are defined in the series configuration (`_index.md`), as `extra.series_intro_templates` and `extra.series_outro_templates`.:
+The system automatically determines which template to use based on the article's position.
+
+The templates are defined in the series configuration (`_index.md`), as `extra.series_intro_templates` and `extra.series_outro_templates`:
 
 ```toml,name=series/_index.md
 [extra.series_intro_templates]
@@ -190,8 +194,9 @@ default = "Part $SERIES_PAGE_INDEX of $SERIES_PAGES_NUMBER"
 All templates are optional. Template selection follows a priority system:
 
 1. If a position-specific template exists (`next_only`, `middle`, or `prev_only`), it will be used
-2. Otherwise, the `default` template is used
-3. If no templates are defined at all, no series information will be displayed
+2. If a navigation-specific template exists (`has_prev`, or `has_next`, in this order), it will be used
+3. Otherwise, the `default` template is used
+4. If no templates are defined at all, no series information will be displayed
 
 See the [template example](#template-example) for a more elaborate example.
 
